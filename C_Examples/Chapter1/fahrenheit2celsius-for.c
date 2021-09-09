@@ -1,9 +1,20 @@
 #include <stdio.h>
+/**
+Aaron Zambrano
+Homework 1
+Dr. Shirley Moore
+Last edited: September 4, 2021
+*/
 
-main()
+//Conversion function
+float convert(float fahr){
+	return ((5.0/9.0) * (fahr-32));	
+}
+
+int main()
 {
-	  int fahr;
-
-	  for (fahr = 0; fahr <= 300; fahr = fahr + 20)
-		    printf("%3d %6.1f\n", fahr, (5.0 / 9.0) * (fahr - 32));
+	float fahr; 
+	printf("Enter Degrees Fahrenheit:\n");
+	scanf("%f",&fahr);
+	printf("Conversion Successful.\n %6.1f Fahrenheit is%6.1f degrees Celsius\n",fahr,convert(fahr));
 }
