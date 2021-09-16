@@ -9,58 +9,24 @@ char *word_start(char* str);
 char *end_word(char* str);
 int count_token(char*str);
 char *copy_str(char *intStr, short len);
-void print_all_tokens(char** tokens);
+void print_all_tokens(char** tokens,int length);
 
 
 int main(){
-    printf("Here");
+    
     char ** start;
     int len;
     char line[MAXLINE]; /* current input line */
     printf("Please enter the input string:\n");
     printf("> ");
     //get user input
-    fgets(line,MAXLINE,stdin);
-    printf("USER INPUT: %s",line);
-    start = tokenize(line);
-    printf("HERE");
-    print_all_tokens(start);
+    if(*fgets(line,MAXLINE,stdin)!= '\n'){
+	    printf("USER INPUT: %s",line);
+	    start = tokenize(line);
+   }
     return 0;
 }
 
-//TODO: Fix tokenizer problem (tok not being Hi in Hi There)
-//substituted space with _ for testing purposes
-/**
-char** tokenize(char* str){
-    char* start;
-    char* tok;
-    char ** token;
-
-    
-    //printf("%c\n",*str);
-    //printf("%c\n",**token);
-    
-    int i,previous;
-    previous = 0;
-    start = str;
-    for(i = 0; *str != '\0'; ++i){
-        if (*str == '_'){    
-            tok = substring(start,i,previous);
-            token = &tok;
-            //print token
-	    previous = i;
-	}
-	++str;
-        start = str;
-    }
-    //case for last word/token
-    
-    printf("Current position of Token: %s\n",*token);
-    printf("Current poistion of Start: %s\n",start);
-    printf("Current position of tok: %s\n",tok);
-    return token;
-}
-**/
 
 /* Return true (non-zero) if c is a whitespace characer
    ('\t' or ' ').
@@ -144,13 +110,14 @@ char** tokenize(char* str){
     char* end;
     char c;
     char* current_string;
-    int t_count,sub_length;
+    int t_count,sub_length, i;
     t_count = count_tokens(str);
     //Initialize token array here?
     char **ptr = malloc(t_count*sizeof(char*)); //[. . .]
-    char **initial = ptr[0];
+    char **initial = ptr;
     //initial
     start = str;
+    i = 0;
     while(*str != '\0'){
         //update end
         if(delim_character(*str)){
@@ -160,13 +127,13 @@ char** tokenize(char* str){
 		printf("Current Sub String length: %d\n",sub_length);
 	        //store this to a token
 		current_string = copy_str(start,sub_length);
-                ptr = current_string;
+                ptr[i] = current_string;
 		printf("CURRENT SUB STRING: %s\n",current_string);
 	        //update start
 	        start = str+1;
 	        //next
 	        str = start;
-		++ptr;
+		++i;
 	}
         ++str;
     }
@@ -178,36 +145,23 @@ char** tokenize(char* str){
 	sub_length = end - start;
         //store
 	current_string = copy_str(start,sub_length);
-        ptr = current_string;
+        ptr[i] = current_string;
     }
     printf("Current Sub String length:%d\n",sub_length);
     printf("CURRENT SUB STRING:%s\n",current_string);
-    
+    print_all_tokens(initial,t_count);
     return initial;
 }
 
 
-void print_all_tokens(char** tokens){
+void print_all_tokens(char** tokens,int length){
     int i;
     i = 0;
-    printf("Here");
-    //printf("%s",tokens);
-}
-
-
-/*
-char* substring(char* start, int current,int previous){
-    char* temp = start;
     
-    char* new_string = (char*) malloc(current-previous*sizeof(char));
-    char* first = new_string;
-    while( (*new_string = *temp) != '\0'){
-        ++new_string;
-        ++temp;
-        
+    for(i = 0; i< length; ++i){
+    	printf("Tokens[%d]: %s\n",i,tokens[i]);
     }
-    new_string = first;
-
-    return new_string;
 }
-*/
+
+
+
