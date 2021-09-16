@@ -40,7 +40,7 @@ bool delim_character(char c){
    character (not tab or space).
    Zero terminators are not printable (therefore false) */
 bool non_delim_character(char c){
-    return c != ' ' || c != '\t';
+    return c != ' ' || c != '\t' || c != '\0';
 }
 
 
@@ -93,10 +93,12 @@ inStr is start i believe
 char *copy_str(char *inStr, short len){
     char* new_string = (char*) malloc(len*sizeof(char));
     char* s = new_string;
+    
     while((*new_string = *inStr) != ' '){
         ++inStr;
         ++new_string;
     }
+
     *new_string ='\0';
     //Go back to the intial character of the tokenized string
     new_string = s;
@@ -110,7 +112,7 @@ char** tokenize(char* str){
     char* end;
     char c;
     char* current_string;
-    int t_count,sub_length, i;
+    int t_count,sub_length, i,count_space;
     t_count = count_tokens(str);
     //Initialize token array here?
     char **ptr = malloc(t_count*sizeof(char*)); //[. . .]
@@ -118,9 +120,10 @@ char** tokenize(char* str){
     //initial
     start = str;
     i = 0;
+    
     while(*str != '\0'){
-        //update end
         if(delim_character(*str)){
+		//update end
 		end = end_word(start);
 		sub_length = (end - start) + 1;
 		//printf("%s",start);
@@ -130,7 +133,7 @@ char** tokenize(char* str){
                 ptr[i] = current_string;
 		printf("CURRENT SUB STRING: %s\n",current_string);
 	        //update start
-	        start = str+1;
+	        start = word_start(str);
 	        //next
 	        str = start;
 		++i;
@@ -138,7 +141,6 @@ char** tokenize(char* str){
         ++str;
     }
     //last set of characters
-   
     if(*str == '\0'){
 	end = str;
         printf("%s\n",end);
