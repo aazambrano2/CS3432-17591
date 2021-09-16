@@ -9,8 +9,12 @@ char *word_start(char* str);
 char *end_word(char* str);
 int count_token(char*str);
 char *copy_str(char *intStr, short len);
-void print_all_token(char** tokens);
+void print_all_tokens(char** tokens);
+
+
 int main(){
+    printf("Here");
+    char ** start;
     int len;
     char line[MAXLINE]; /* current input line */
     printf("Please enter the input string:\n");
@@ -18,7 +22,9 @@ int main(){
     //get user input
     fgets(line,MAXLINE,stdin);
     printf("USER INPUT: %s",line);
-    tokenize(line);
+    start = tokenize(line);
+    printf("HERE");
+    print_all_tokens(start);
     return 0;
 }
 
@@ -132,6 +138,7 @@ char *copy_str(char *inStr, short len){
 }
 
 char** tokenize(char* str){
+    
     char** dummy;
     char* start;
     char* end;
@@ -140,6 +147,8 @@ char** tokenize(char* str){
     int t_count,sub_length;
     t_count = count_tokens(str);
     //Initialize token array here?
+    char **ptr = malloc(t_count*sizeof(char*)); //[. . .]
+    char **initial = ptr[0];
     //initial
     start = str;
     while(*str != '\0'){
@@ -151,11 +160,13 @@ char** tokenize(char* str){
 		printf("Current Sub String length: %d\n",sub_length);
 	        //store this to a token
 		current_string = copy_str(start,sub_length);
+                ptr = current_string;
 		printf("CURRENT SUB STRING: %s\n",current_string);
 	        //update start
 	        start = str+1;
 	        //next
 	        str = start;
+		++ptr;
 	}
         ++str;
     }
@@ -167,14 +178,20 @@ char** tokenize(char* str){
 	sub_length = end - start;
         //store
 	current_string = copy_str(start,sub_length);
+        ptr = current_string;
     }
     printf("Current Sub String length:%d\n",sub_length);
     printf("CURRENT SUB STRING:%s\n",current_string);
-    return dummy;
+    
+    return initial;
 }
 
 
 void print_all_tokens(char** tokens){
+    int i;
+    i = 0;
+    printf("Here");
+    //printf("%s",tokens);
 }
 
 
