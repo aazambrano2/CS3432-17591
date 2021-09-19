@@ -34,8 +34,6 @@ int main(){
    }
     return 0;
 }
-
-
 /* Return true (non-zero) if c is a whitespace characer
    ('\t' or ' ').
    Zero terminators are not printable (therefore false) */
@@ -136,7 +134,6 @@ char** tokenize(char* str){
 		//update end
 		end = end_word(start);
 		sub_length = (end - start) + 1;
-		printf("Current Sub String length: %d\n",sub_length);
 	        //store this to a token
 		current_string = copy_str(start,sub_length);
                 ptr[i] = current_string;
