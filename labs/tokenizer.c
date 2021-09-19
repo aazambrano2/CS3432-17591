@@ -1,3 +1,12 @@
+/**
+AARON ZAMBRANO
+
+LAB 1
+
+Last Edited: 9/19/2021 12:11 AM
+*/
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
