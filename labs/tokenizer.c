@@ -13,7 +13,6 @@ void print_all_tokens(char** tokens,int length);
 
 
 int main(){
-    
     char ** start;
     int len;
     char line[MAXLINE]; /* current input line */
@@ -68,7 +67,7 @@ char *end_word(char* str){
     return s;
 }
 
-// counts the number of words or tokens
+/* Returns the count of the number of words or tokens*/
 int count_tokens(char* str){
     char c;
     int acc;
@@ -105,6 +104,8 @@ char *copy_str(char *inStr, short len){
     return new_string;
 }
 
+/*Returns a double pointer that references the base of a pointer array
+where every pointer points to the base of character arrays*/
 char** tokenize(char* str){
     
     char** dummy;
@@ -114,10 +115,10 @@ char** tokenize(char* str){
     char* current_string;
     int t_count,sub_length, i,count_space;
     t_count = count_tokens(str);
-    //Initialize token array here?
-    char **ptr = malloc(t_count*sizeof(char*)); //[. . .]
+    //Initialize token array
+    char **ptr = malloc(t_count*sizeof(char*));
+    //Have a double pointer poiting to the base of pointer array
     char **initial = ptr;
-    //initial
     start = str;
     i = 0;
     
@@ -126,36 +127,33 @@ char** tokenize(char* str){
 		//update end
 		end = end_word(start);
 		sub_length = (end - start) + 1;
-		//printf("%s",start);
 		printf("Current Sub String length: %d\n",sub_length);
 	        //store this to a token
 		current_string = copy_str(start,sub_length);
                 ptr[i] = current_string;
-		printf("CURRENT SUB STRING: %s\n",current_string);
 	        //update start
 	        start = word_start(str);
-	        //next
+	        //make sure to start at the next spaced word
 	        str = start;
 		++i;
 	}
         ++str;
     }
-    //last set of characters
+    //last spaced word case
     if(*str == '\0'){
 	end = str;
         printf("%s\n",end);
 	sub_length = end - start;
-        //store
+        //store to tokenizer
 	current_string = copy_str(start,sub_length);
         ptr[i] = current_string;
     }
-    printf("Current Sub String length:%d\n",sub_length);
-    printf("CURRENT SUB STRING:%s\n",current_string);
     print_all_tokens(initial,t_count);
     return initial;
 }
 
-
+/*Prints all tokenized tokens given the pointer array and the number of tokens
+representing the length of the pointer array*/
 void print_all_tokens(char** tokens,int length){
     int i;
     i = 0;
