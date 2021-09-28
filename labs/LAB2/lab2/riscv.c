@@ -5,6 +5,7 @@
 #include "tokenizer.h" // Create header file and reference that
 #include "memory.h" // built-in functions to read and write to a specific file
 
+#include <string.h> //ONLY USE strtok AND fgets
 int32_t* reg; // Array of 32 32-bit registers
 
 void init_regs();
@@ -31,6 +32,8 @@ void init_regs(){
  * as a parameter to this function.
  */
 bool interpret(char* instr){
+
+
 	return true;
 }
 
