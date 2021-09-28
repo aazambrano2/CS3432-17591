@@ -4,14 +4,14 @@
 #include <stdint.h> // use guaranteed 64-bit integers
 #include "tokenizer.h" // Create header file and reference that
 #include "memory.h" // built-in functions to read and write to a specific file
-
 #include <string.h> //ONLY USE strtok AND fgets
 int32_t* reg; // Array of 32 32-bit registers
-
 void init_regs();
 bool interpret(char* instr);
 void write_read_demo();
+int count_tokens(char* str);
 
+#define MAXLINE 1000
 /**
  * Initialize register array for usage.
  * Malloc space for each 32-bit register then initializes each register to 0.
@@ -24,7 +24,19 @@ void init_regs(){
 		reg[i] = i;
 }
 
-
+//TODO: ADD DESCRIPTION
+int count_tokens(char* str){
+    char c;
+    int acc;
+    while(*str != '\0'){
+        if(*str == ' ')
+          ++acc;
+        ++str;
+    }
+    if (*str == '\0')
+       ++acc;
+    return acc;
+}
 
 /**
  * Fill out this function and use it to read interpret user input to execute RV64 instructions.
@@ -32,8 +44,34 @@ void init_regs(){
  * as a parameter to this function.
  */
 bool interpret(char* instr){
+	//TODO: INSERT LOGIC OF INSTRUCTIONS
+	int t_count;
+	t_count = count_tokens(instr);
+	//FILL POINTER ARRAY WITH TOKENS
+	char ** t = malloc(t_count*sizeof(char*));
+        int i;
+	i = 0;
+	///first token
+	char * token = strtok(instr, " ");
+	//get rest of tokens
+	while(token != NULL){
+		//update new token
+		t[i] = token;
+		token = strtok(NULL, " ");
+                //insert token
+		// update your position of pointer array
+		++i;
+	}
+	
+	//PRINTING POINTER ARRAY CONTENTS
+	for(int j = 0; j < t_count; ++j){
+		
+		printf("TOKEN[%d]: ",j);
+		printf("%s\n", t[j]);
+	}
 
-
+	//TODO: FIX LOGIC;
+	
 	return true;
 }
 
@@ -62,12 +100,20 @@ void write_read_demo(){
  * Your code goes in the main
  *
  */
+//TODO: MAIN WILL BE PROVIDED BY STEVEN
 int main(){
 	// Do not write any code between init_regs
 	init_regs(); // DO NOT REMOVE THIS LINE
-
 	// Below is a sample program to a write-read. Overwrite this with your own code.
 	write_read_demo();
-
+	char line[MAXLINE];
+	printf("Please enter the INSTRUCTION:\n");
+    	printf("> ");
+        bool complete;
+    	//get user input
+    	if(*fgets(line,MAXLINE,stdin)!= '\n'){
+            printf("USER INPUT: %s",line);
+            complete = interpret(line);
+   	}
 	return 0;
 }
