@@ -54,22 +54,23 @@ bool interpret(char* instr){
 	///first token
 	char * token = strtok(instr, " ");
 	//get rest of tokens
-	while(token != NULL){
+	while(token != NULL && i != t_count){
 		//update new token
 		t[i] = token;
+		//
 		token = strtok(NULL, " ");
-                //insert token
 		// update your position of pointer array
 		++i;
 	}
 	
 	//PRINTING POINTER ARRAY CONTENTS
+	//BUG FOUND. LOOP GIVES SEGMENTATION FAULT
 	for(int j = 0; j < t_count; ++j){
 		
 		printf("TOKEN[%d]: ",j);
 		printf("%s\n", t[j]);
 	}
-
+	
 	//TODO: FIX LOGIC;
 	
 	return true;
