@@ -2,8 +2,8 @@
 #include <stdbool.h>
 #include <stdlib.h> // malloc & free
 #include <stdint.h> // use guaranteed 64-bit integers
-#include "tokenizer.h" // Create header file and reference that
-#include "memory.h" // built-in functions to read and write to a specific file
+//#include "tokenizer.h" // Create header file and reference that
+//#include "memory.h" // built-in functions to read and write to a specific file
 #include <string.h> //ONLY USE strtok AND fgets
 int32_t* reg; // Array of 32 32-bit registers
 void init_regs();
@@ -25,9 +25,11 @@ void init_regs(){
 }
 
 //TODO: ADD DESCRIPTION
+// BUG FIX COUNTER
 int count_tokens(char* str){
     char c;
     int acc;
+    acc = 0;
     while(*str != '\0'){
         if(*str == ' ')
           ++acc;
@@ -64,12 +66,12 @@ bool interpret(char* instr){
 	}
 	
 	//PRINTING POINTER ARRAY CONTENTS
-	//BUG FOUND. LOOP GIVES SEGMENTATION FAULT
 	for(int j = 0; j < t_count; ++j){
 		
 		printf("TOKEN[%d]: ",j);
 		printf("%s\n", t[j]);
 	}
+	
 	
 	//TODO: FIX LOGIC;
 	
@@ -83,6 +85,7 @@ bool interpret(char* instr){
  * Feel free to change "data_to_write" and "address" variables to see how these affect mem.txt
  * Use 0x before an int in C to hardcode it as text, but you may enter base 10 as you see fit.
  */
+/*
 void write_read_demo(){
 	int32_t data_to_write = 0xFFF; // equal to 4095
 	int32_t address = 0x98; // equal to 152
@@ -96,7 +99,7 @@ void write_read_demo(){
 
 	printf("Read address %lu (0x%lX): %lu (0x%lX)\n", address, address, read, read); // %lu -> format as an long-unsigned
 }
-
+*/
 /**
  * Your code goes in the main
  *
@@ -104,9 +107,9 @@ void write_read_demo(){
 //TODO: MAIN WILL BE PROVIDED BY STEVEN
 int main(){
 	// Do not write any code between init_regs
-	init_regs(); // DO NOT REMOVE THIS LINE
+	//init_regs(); // DO NOT REMOVE THIS LINE
 	// Below is a sample program to a write-read. Overwrite this with your own code.
-	write_read_demo();
+	//write_read_demo();
 	char line[MAXLINE];
 	printf("Please enter the INSTRUCTION:\n");
     	printf("> ");
