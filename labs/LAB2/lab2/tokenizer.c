@@ -20,11 +20,11 @@ int count_token(char*str);
 char *copy_str(char *intStr, short len);
 void print_all_tokens(char** tokens,int length);
 
-
+/*
 int main(){
     char ** start;
     int len;
-    char line[MAXLINE]; /* current input line */
+    char line[MAXLINE]; // current input line 
     printf("Please enter the input string:\n");
     printf("> ");
     //get user input
@@ -34,6 +34,7 @@ int main(){
    }
     return 0;
 }
+*/
 /* Return true (non-zero) if c is a whitespace characer
    ('\t' or ' ').
    Zero terminators are not printable (therefore false) */
@@ -78,6 +79,7 @@ char *end_word(char* str){
 int count_tokens(char* str){
     char c;
     int acc;
+    acc = 0;
     while(*str != '\0'){
         if(delim_character(*str))
 	  ++acc;
@@ -97,9 +99,9 @@ int count_tokens(char* str){
 inStr is start i believe
 */
 char *copy_str(char *inStr, short len){
-    char* new_string = (char*) malloc(len*sizeof(char));
+    char* new_string = (char*) malloc((len)*sizeof(char));
     char* s = new_string;
-    
+    printf("TOKEN LENGTH %d",len);
     while((*new_string = *inStr) != ' '){
         ++inStr;
         ++new_string;
