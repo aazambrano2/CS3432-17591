@@ -77,7 +77,6 @@ char *end_word(char* str){
 
 /* Returns the count of the number of words or tokens*/
 int count_tokens(char* str){
-    char c;
     int acc;
     acc = 0;
     while(*str != '\0'){
@@ -101,7 +100,7 @@ inStr is start i believe
 char *copy_str(char *inStr, short len){
     char* new_string = (char*) malloc((len)*sizeof(char));
     char* s = new_string;
-    printf("TOKEN LENGTH %d",len);
+   // printf("TOKEN LENGTH %d",len);
     while((*new_string = *inStr) != ' '){
         ++inStr;
         ++new_string;
@@ -116,13 +115,10 @@ char *copy_str(char *inStr, short len){
 /*Returns a double pointer that references the base of a pointer array
 where every pointer points to the base of character arrays*/
 char** tokenize(char* str){
-    
-    char** dummy;
     char* start;
     char* end;
-    char c;
     char* current_string;
-    int t_count,sub_length, i,count_space;
+    int t_count,sub_length, i;
     t_count = count_tokens(str);
     //Initialize token array
     char **ptr = malloc(t_count*sizeof(char*));
