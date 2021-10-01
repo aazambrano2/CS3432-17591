@@ -47,6 +47,7 @@ int count_tokens(char* str){
  * as a parameter to this function.
  */
 bool interpret(char* instr){
+	bool valid = false;
 	/* 
 	//THIS IS MY PLAN B
 	int t_count;
@@ -79,23 +80,29 @@ bool interpret(char* instr){
 	//}
 	//TODO: Add check to validate if it is a valid instruction
 	//Try to do string comparisons first
-	bool equality=true; 
-	 
-	
 	if (equals(token[0],"ADD")){
 	    //do logic
-	   printf("ADD LOGIC\n");
+		printf("ADD LOGIC\n");
+		valid = true;
 	}
 	
+	else if (equals(token[0],"ADDI")){
+	            //do logic
+		printf("ADDI LOGIC\n");
+	}
 	
+	else if(equals(token[0], "LW")){
+		printf("LW LOGIC");
+	}
 	
+	else if(equals(token[0], "SW")){
+		printf("SW LOGIC");
+	}
+	//EXTRA CREDIT
 
-
-	
-	
 	//TODO: FIX LOGIC;
 	
-	return true;
+	return valid;
 }
 
 //TODO: Add Description
@@ -114,9 +121,8 @@ bool equals(char* instr, char* match){
 	//printf("MATCH [%c]\n",*match);
 	//if(*instr+1 == '\n'){printf("THIS IS A NULL TERMINATOR\n");}
 	if(*instr != '\0'){
-		printf("INSTRUCTION INVALID\n");
 		return false;
-		}
+	}
 	return true;
 }
 
