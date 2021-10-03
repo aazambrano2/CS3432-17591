@@ -10,8 +10,14 @@ void init_regs();
 void print_regs();
 bool interpret(char* instr);
 void write_read_demo();
-int count_tokens(char* str);
+
+//int count_tokens(char* str);
+
 bool equals(char* instr, char* match);
+int parse_register(char* p);
+
+void add_instruct(char* sum, char* op1, char* op2);
+void addi_instruct(char* sum, char* op1, char* op2);
 #define MAXLINE 1000
 /**
  * Initialize register array for usage.
@@ -68,27 +74,33 @@ bool interpret(char* instr){
 		++i;
 	}
 	*/
-
-	//TODO: Insert logic of Instructions
-	char** token = tokenize(instr);
 	//PRINTING POINTER ARRAY CONTENTS
 	//PART OF PLAN B
 	//for(int j = 0; j < t_count; ++j){
-		
 	//	printf("TOKEN[%d]: ",j);
 	//	printf("%s\n", token[j]);
 	//}
+
+	//TODO: Insert logic of Instructions
+	char** token = tokenize(instr);
+
+	
 	//TODO: Add check to validate if it is a valid instruction
 	//Try to do string comparisons first
 	if (equals(token[0],"ADD")){
 	    //do logic
 		printf("ADD LOGIC\n");
+		add_instruct(token[1],token[2],token[3]);
+		print_regs();
 		valid = true;
 	}
 	
 	else if (equals(token[0],"ADDI")){
 	            //do logic
 		printf("ADDI LOGIC\n");
+		addi_instruct(token[1],token[2],token[3]);
+		print_regs();
+		valid = true;
 	}
 	
 	else if(equals(token[0], "LW")){
@@ -100,26 +112,67 @@ bool interpret(char* instr){
 	}
 	//EXTRA CREDIT
 
-	//TODO: FIX LOGIC;
+	
 	
 	return valid;
 }
 
+//CHECK OF USE CASES
+//parsing an add instruction
+void add_instruct(char* sum, char* op1, char* op2){
+	int32_t address, op1_address, op2_address;
+	//ADDRESSES FOR REGISTERS as integers 
+	address = (int32_t) parse_register(sum);
+	op1_address =(int32_t)  parse_register(op1);
+	op2_address = (int32_t) parse_register(op2);
+	//NOW TO USE REG ARRAY (using read_address and write_address)
+	int32_t data_to_write = reg[op1_address] + reg[op2_address];
+	//UPDATE CONTETNS OF ADDRESS
+	reg[address] = data_to_write;
+}
+
+void addi_instruct(char* sum, char* op1, char* op2){
+
+        int32_t address, op1_address, immediate;
+
+        //ADDRESSES FOR REGISTERS as integers
+        address = (int32_t) parse_register(sum);
+        op1_address =(int32_t)  parse_register(op1);
+        immediate = (int32_t) parse_register(op2);
+
+        //NOW TO USE REG ARRAY (using read_address and write_address)
+        int32_t data_to_write = reg[op1_address] + immediate;
+        reg[address] = data_to_write;
+}
+
+//TODO: ADD DESCRIPTION
+// *p => int
+int parse_register(char* p){
+	char* copy_number = p;
+	//START AT NUMBER IF USING REGISTER
+	if(*p == 'X')
+		p = p + 1;
+	//SAVE WHERE YOU STARTED
+	char* s = copy_number;
+	while((*copy_number = *p) != '\0'){
+		++copy_number;
+		++p;
+	}
+	//GO PACK TO THE START OF YOUR NEW STRING
+	copy_number = s;
+	//have to atoi function get you the integer
+	int reg = atoi(copy_number);
+	return reg;
+}
+
+
 //TODO: Add Description
 bool equals(char* instr, char* match){
-	int i;
-	i = 0;
-	//bool eq = true;
 	while(*instr == *match){ 
 		++instr;
 		++match;
 	}
-	//printf("%c\n",*instr);
-	
-	//printf("%d\n",i);
-	//printf("INSTR [%c]",*instr);
-	//printf("MATCH [%c]\n",*match);
-	//if(*instr+1 == '\n'){printf("THIS IS A NULL TERMINATOR\n");}
+	//if(*instr+1 == '\n'){printf("THIS IS A NOT NULL TERMINATOR\n");}
 	if(*instr != '\0'){
 		return false;
 	}
@@ -135,12 +188,14 @@ bool equals(char* instr, char* match){
  */
 /**/
 void write_read_demo(){
-	int32_t data_to_write = 0xFFF; // equal to 4095
-	int32_t address = 0x98; // equal to 152
+	//REG 
+	int32_t data_to_write = 69; // equal to 4095
+	int32_t address = 2; // equal to 152
 	char* mem_file = "mem.txt";
 
 	// Write 4095 (or "0000000 00000FFF") in the 20th address (address 152 == 0x98)
 	int32_t write = write_address(data_to_write, address, mem_file);
+	//reg[address] = write_address(data_to_write, address, mem_file);
 	if(write == (int32_t) NULL)
 		printf("ERROR: Unsucessful write to address %0X\n", 0x40);
 	int32_t read = read_address(address, mem_file);
