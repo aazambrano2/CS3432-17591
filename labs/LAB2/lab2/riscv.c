@@ -5,19 +5,21 @@
 #include "tokenizer.h" // Create header file and reference that
 #include "memory.h" // built-in functions to read and write to a specific file
 #include <string.h> //ONLY USE strtok AND fgets
+
 int32_t* reg; // Array of 32 32-bit registers
 void init_regs();
 void print_regs();
 bool interpret(char* instr);
 void write_read_demo();
 
-//int count_tokens(char* str);
 
 bool equals(char* instr, char* match);
 int parse_register(char* p);
 
 void add_instruct(char* sum, char* op1, char* op2);
 void addi_instruct(char* sum, char* op1, char* op2);
+void load_instruct(char* reg1, char* offset, char* reg2);
+void store_instruct(char* reg1, char* offset, char* reg2);
 #define MAXLINE 1000
 /**
  * Initialize register array for usage.
@@ -31,22 +33,6 @@ void init_regs(){
 		reg[i] = i;
 }
 
-//TODO: ADD DESCRIPTION (PLAN B)
-/*
-int count_tokens(char* str){
-    char c;
-    int acc;
-    acc = 0;
-    while(*str != '\0'){
-        if(*str == ' ')
-          ++acc;
-        ++str;
-    }
-    if (*str == '\0')
-       ++acc;
-    return acc;
-}
-*/
 /**
  * Fill out this function and use it to read interpret user input to execute RV64 instructions.
  * You may expect that a single, properly formatted RISC-V instruction string will be passed
@@ -54,66 +40,38 @@ int count_tokens(char* str){
  */
 bool interpret(char* instr){
 	bool valid = false;
-	/* 
-	//THIS IS MY PLAN B
-	int t_count;
-	t_count = count_tokens(instr);
-	//FILL POINTER ARRAY WITH TOKENS
-	char ** t = malloc(t_count*sizeof(char*));
-        int i;
-	i = 0;
-	///first token
-	char * token = strtok(instr, " ");
-	//get rest of tokens
-	while(token != NULL && i != t_count){
-		//update new token
-		t[i] = token;
-		//
-		token = strtok(NULL, " ");
-		// update your position of pointer array
-		++i;
-	}
-	*/
-	//PRINTING POINTER ARRAY CONTENTS
-	//PART OF PLAN B
-	//for(int j = 0; j < t_count; ++j){
-	//	printf("TOKEN[%d]: ",j);
-	//	printf("%s\n", token[j]);
-	//}
-
 	//TODO: Insert logic of Instructions
 	char** token = tokenize(instr);
-
 	
 	//TODO: Add check to validate if it is a valid instruction
 	//Try to do string comparisons first
 	if (equals(token[0],"ADD")){
-	    //do logic
 		printf("ADD LOGIC\n");
 		add_instruct(token[1],token[2],token[3]);
-		print_regs();
 		valid = true;
 	}
-	
+
 	else if (equals(token[0],"ADDI")){
-	            //do logic
 		printf("ADDI LOGIC\n");
 		addi_instruct(token[1],token[2],token[3]);
-		print_regs();
 		valid = true;
 	}
-	
+
 	else if(equals(token[0], "LW")){
 		printf("LW LOGIC");
+		load_instruct(token[1],token[2],token[3]);
+		valid = true;
 	}
-	
+
 	else if(equals(token[0], "SW")){
 		printf("SW LOGIC");
+		store_instruct(token[1],token[2],token[3]);
+		valid = true;
 	}
 	//EXTRA CREDIT
 
-	
-	
+	//free(token);
+	//free(instr);
 	return valid;
 }
 
@@ -125,7 +83,7 @@ void add_instruct(char* sum, char* op1, char* op2){
 	address = (int32_t) parse_register(sum);
 	op1_address =(int32_t)  parse_register(op1);
 	op2_address = (int32_t) parse_register(op2);
-	//NOW TO USE REG ARRAY (using read_address and write_address)
+	//NOW TO USE REG ARRAY 
 	int32_t data_to_write = reg[op1_address] + reg[op2_address];
 	//UPDATE CONTETNS OF ADDRESS
 	reg[address] = data_to_write;
@@ -143,6 +101,26 @@ void addi_instruct(char* sum, char* op1, char* op2){
         //NOW TO USE REG ARRAY (using read_address and write_address)
         int32_t data_to_write = reg[op1_address] + immediate;
         reg[address] = data_to_write;
+}
+
+void load_instruct(char* reg1, char* offset, char* reg2){
+	int32_t load_reg, offset_int, base_reg;
+	//TO INTEGERS
+	load_reg = (int32_t) parse_register(reg1);
+        offset_int = parse_register(offset);
+        base_reg = (int32_t) parse_register(reg2);
+	//Debug print statement
+	printf("\n%d %d %d\n", load_reg, offset_int, base_reg);
+
+	//BUG
+	int32_t ad = 2; //testing purposes
+        reg[load_reg] = read_address(ad,"mem.txt");
+	//
+	printf("\n%d\n",reg[load_reg]);
+}
+
+void store_instruct(char* reg1, char* offset, char* reg2){
+	//TODO
 }
 
 //TODO: ADD DESCRIPTION
@@ -172,7 +150,6 @@ bool equals(char* instr, char* match){
 		++instr;
 		++match;
 	}
-	//if(*instr+1 == '\n'){printf("THIS IS A NOT NULL TERMINATOR\n");}
 	if(*instr != '\0'){
 		return false;
 	}
@@ -186,10 +163,10 @@ bool equals(char* instr, char* match){
  * Feel free to change "data_to_write" and "address" variables to see how these affect mem.txt
  * Use 0x before an int in C to hardcode it as text, but you may enter base 10 as you see fit.
  */
-/**/
+
 void write_read_demo(){
 	//REG 
-	int32_t data_to_write = 69; // equal to 4095
+	int32_t data_to_write = 68; // equal to 4095
 	int32_t address = 2; // equal to 152
 	char* mem_file = "mem.txt";
 
@@ -203,6 +180,7 @@ void write_read_demo(){
 	printf("Read address %lu (0x%lX): %lu (0x%lX)\n", address, address, read, read); // %lu -> format as an long-unsigned
 }
 
+
 /**
  * Prints all 32 registers in column-format
  */
@@ -215,14 +193,44 @@ void print_regs(){
         printf(" X%02i:%.*lld\n", i+24, col_size, (long long int) reg[i+24]);
     }
 }
-/**/
+
 /**
  * Your code goes in the main
  *
  */
-//TODO: MAIN WILL BE PROVIDED BY STEVEN
+/*
 int main(){
-	
+	// Do not write any code between init_regs
+	init_regs(); // DO NOT REMOVE THIS LINE
+
+	print_regs();
+
+	// Below is a sample program to a write-read. Overwrite this with your own code.
+	write_read_demo();
+
+	printf(" RV32 Interpreter.\nType RV32 instructions. Use upper-case letters and space as a delimiter.\nEnter 'EOF' character to end program\n");
+
+	char* instruction = malloc(1000 * sizeof(char));
+	bool is_null = false;
+	// fgets() returns null if EOF is reached.
+	is_null = fgets(instruction, 1000, stdin) == NULL;
+	//TODO: BUG
+	while(!is_null){
+		interpret(instruction);
+		printf("\n");
+		print_regs();
+		printf("\n");
+		break; 
+		is_null = fgets(instruction, 1000, stdin) == NULL;
+	}
+
+	printf("Good bye!\n");
+
+	return 0;
+}
+*/
+
+int main(){
 	// Do not write any code between init_regs
 	init_regs(); // DO NOT REMOVE THIS LINE
 	// Below is a sample program to a write-read. Overwrite this with your own code.
@@ -231,13 +239,13 @@ int main(){
 	char line[MAXLINE];
 	printf("Please enter the INSTRUCTION:\n");
     	printf("> ");
-        bool complete;
-	complete = false;
-	
+	//bool complete = false;
     	//get user input
     	if(*fgets(line,MAXLINE,stdin)!= '\n'){
             printf("USER INPUT: %s",line);
-            complete = interpret(line);
+            interpret(line);
+	    print_regs();
    	}
 	return 0;
 }
+
