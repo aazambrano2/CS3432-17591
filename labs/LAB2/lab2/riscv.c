@@ -40,11 +40,16 @@ void init_regs(){
  */
 bool interpret(char* instr){
 	bool valid = false;
-	//TODO: Insert logic of Instructions
+	//read_address WORKS HERE
+	//int32_t read = read_address(0,"mem.txt");
+	//printf("\n%d\n",read);
 	char** token = tokenize(instr);
-	
+	//read_address BREAKES HERE
+	int32_t read = read_address(0,"mem.txt");
+	//printf("\n%d\n",read);
 	//TODO: Add check to validate if it is a valid instruction
 	//Try to do string comparisons first
+	/*
 	if (equals(token[0],"ADD")){
 		printf("ADD LOGIC\n");
 		add_instruct(token[1],token[2],token[3]);
@@ -56,22 +61,19 @@ bool interpret(char* instr){
 		addi_instruct(token[1],token[2],token[3]);
 		valid = true;
 	}
-
 	else if(equals(token[0], "LW")){
 		printf("LW LOGIC");
 		load_instruct(token[1],token[2],token[3]);
+		//read_address BREAKS HERE AS WELL
 		valid = true;
 	}
-
 	else if(equals(token[0], "SW")){
 		printf("SW LOGIC");
 		store_instruct(token[1],token[2],token[3]);
 		valid = true;
 	}
+	*/
 	//EXTRA CREDIT
-
-	//free(token);
-	//free(instr);
 	return valid;
 }
 
@@ -109,12 +111,14 @@ void load_instruct(char* reg1, char* offset, char* reg2){
 	load_reg = (int32_t) parse_register(reg1);
         offset_int = parse_register(offset);
         base_reg = (int32_t) parse_register(reg2);
+	
 	//Debug print statement
 	printf("\n%d %d %d\n", load_reg, offset_int, base_reg);
-
+	
 	//BUG
 	int32_t ad = 2; //testing purposes
-        reg[load_reg] = read_address(ad,"mem.txt");
+	printf("Bug Found\n");
+        //reg[load_reg] = read_address(ad,"mem.txt");
 	//
 	printf("\n%d\n",reg[load_reg]);
 }
@@ -220,7 +224,7 @@ int main(){
 		printf("\n");
 		print_regs();
 		printf("\n");
-		break; 
+		break;
 		is_null = fgets(instruction, 1000, stdin) == NULL;
 	}
 
@@ -234,7 +238,7 @@ int main(){
 	// Do not write any code between init_regs
 	init_regs(); // DO NOT REMOVE THIS LINE
 	// Below is a sample program to a write-read. Overwrite this with your own code.
-	write_read_demo();
+	//write_read_demo();
 	print_regs();
 	char line[MAXLINE];
 	printf("Please enter the INSTRUCTION:\n");

@@ -126,7 +126,6 @@ char** tokenize(char* str){
     char **initial = ptr;
     start = str;
     i = 0;
-    
     while(*str != '\0'){
         if(delim_character(*str)){
 		//update end
