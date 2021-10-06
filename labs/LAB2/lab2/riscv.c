@@ -139,7 +139,7 @@ void load_instruct(char* reg1, char* offset, char* reg2){
 	int32_t ad = 0; //testing purposes
 	printf("Bug Found\n");
 	int32_t address = reg[base_reg] + offset_int;
-        reg[load_reg] = read_address(address,"mem.txt");
+        //reg[load_reg] = read_address(address,"mem.txt");
 	//
 	printf("\n%d\n",reg[load_reg]);
 }
