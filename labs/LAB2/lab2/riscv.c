@@ -20,7 +20,6 @@ void add_instruct(char* sum, char* op1, char* op2);
 void addi_instruct(char* sum, char* op1, char* op2);
 void load_instruct(char* reg1, char* offset, char* reg2);
 void store_instruct(char* reg1, char* offset, char* reg2);
-
 //EXTRA CREDIT
 void and(char* rd, char* rs1, char* rs2);
 void or(char* rd, char* rs1, char* rs2);
@@ -280,24 +279,3 @@ int main(){
 
 	return 0;
 }
-
-/*
-int main(){
-	// Do not write any code between init_regs
-	init_regs(); // DO NOT REMOVE THIS LINE
-	// Below is a sample program to a write-read. Overwrite this with your own code.
-	//write_read_demo();
-	print_regs();
-	char line[MAXLINE];
-	printf("Please enter the INSTRUCTION:\n");
-    	printf("> ");
-	//bool complete = false;
-    	//get user input
-    	if(*fgets(line,MAXLINE,stdin)!= '\n'){
-            printf("USER INPUT: %s",line);
-            interpret(line);
-	    print_regs();
-   	}
-	return 0;
-}
-*/
