@@ -45,22 +45,15 @@ void init_regs(){
  */
 bool interpret(char* instr){
 	bool valid = false;
-	//read_address WORKS HERE
-	//int32_t read1 = read_address(0,"mem.txt");
-	//printf("\nread before calling tokenizer: %d\n",read1);
+	int32_t read1 = read_address(0,"mem.txt");
+	//tokenize instruction
 	char** token = tokenize(instr);
-	//read_address BREAKES HERE
-	//int32_t read2 = read_address(0,"mem.txt");
-	//printf("\nread after calling tokenizer: %d\n",read2);
-	//TODO: Add check to validate if it is a valid instruction
-	if (equals(token[0],"ADD")){
-		printf("ADD LOGIC\n");
-		add_instruct(token[1],token[2],token[3]);
+	if (equals(token[0],"ADDI")){
+		addi_instruct(token[1],token[2],token[3]);
 		valid = true;
 	}
-	else if (equals(token[0],"ADDI")){
-		printf("ADDI LOGIC\n");
-		addi_instruct(token[1],token[2],token[3]);
+	else if (equals(token[0],"ADD")){
+		add_instruct(token[1],token[2],token[3]);
 		valid = true;
 	}
 	else if(equals(token[0], "LW")){
@@ -95,7 +88,7 @@ bool interpret(char* instr){
 	return valid;
 }
 
-//CHECK OF USE CASES
+
 //Parses an add instruction and stores to register array
 void add_instruct(char* sum, char* op1, char* op2){
 	int32_t address, op1_address, op2_address;
@@ -125,26 +118,26 @@ void addi_instruct(char* sum, char* op1, char* op2){
 //Parses an load instruction and stores to register array
 void load_instruct(char* reg1, char* offset, char* reg2){
 	int32_t load_reg, offset_int, base_reg;
-	//TO INTEGERS
+	//MAKE STRINGS TO INTEGERS
 	load_reg = (int32_t) parse_register(reg1);
         offset_int = (int32_t) parse_register(offset);
         base_reg = (int32_t) parse_register(reg2);
-	
-	//Debug print statement
-	printf("\n%d %d %d\n", load_reg, offset_int, base_reg);
-	
-	//BUG
-	int32_t ad = 0; //testing purposes
-	printf("Bug Found\n");
+	//LOAD WORD TO REG ARRAY FROM MEM.TXT
 	int32_t address = reg[base_reg] + offset_int;
-        //reg[load_reg] = read_address(address,"mem.txt");
-	//
-	printf("\n%d\n",reg[load_reg]);
+        reg[load_reg] = read_address(address,"mem.txt");
 }
 //Parses an store instruction and writes to memory text file
 void store_instruct(char* reg1, char* offset, char* reg2){
-	//TODO
+	int32_t load_reg, offset_int, base_reg;
+	//TO INTEGERS
+        load_reg = (int32_t) parse_register(reg1);
+        offset_int = (int32_t) parse_register(offset);
+        base_reg = (int32_t) parse_register(reg2);
+        int32_t address = reg[load_reg] + offset_int;
+	int32_t data = reg[load_reg];
+        write_address(data , address,"mem.txt");
 }
+
 //EXTRA CREDIT
 
 //Stores the result of two RISCV registers using the AND operator
@@ -197,15 +190,15 @@ int parse_register(char* p){
 
 //Checks if the instruction operator matches with a matching string to do the apropriate logic.
 bool equals(char* instr, char* match){
-	while(*instr == *match){ 
+	bool eq = true;
+	while(eq && *instr != '\0' && *match != '\0'){
+		//An unmatched character found
+		if(*instr != *match)
+			eq = false; 
 		++instr;
 		++match;
 	}
-	//Loop was broken early meaning no match
-	if(*instr != '\0'){
-		return false;
-	}
-	return true;
+	return eq;
 }
 
 
@@ -271,7 +264,6 @@ int main(){
 		printf("\n");
 		print_regs();
 		printf("\n");
-		break;
 		is_null = fgets(instruction, 1000, stdin) == NULL;
 	}
 
