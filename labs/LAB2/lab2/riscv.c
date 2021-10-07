@@ -54,14 +54,11 @@ bool interpret(char* instr){
 	//int32_t read2 = read_address(0,"mem.txt");
 	//printf("\nread after calling tokenizer: %d\n",read2);
 	//TODO: Add check to validate if it is a valid instruction
-	//Try to do string comparisons first
-	
 	if (equals(token[0],"ADD")){
 		printf("ADD LOGIC\n");
 		add_instruct(token[1],token[2],token[3]);
 		valid = true;
 	}
-
 	else if (equals(token[0],"ADDI")){
 		printf("ADDI LOGIC\n");
 		addi_instruct(token[1],token[2],token[3]);
@@ -70,7 +67,6 @@ bool interpret(char* instr){
 	else if(equals(token[0], "LW")){
 		printf("LW LOGIC");
 		load_instruct(token[1],token[2],token[3]);
-		//read_address BREAKS HERE AS WELL
 		valid = true;
 	}
 	else if(equals(token[0], "SW")){
@@ -93,6 +89,9 @@ bool interpret(char* instr){
 		xor(token[1],token[2],token[3]);
 		valid = true;
 	}
+	else{
+		printf("\nINVALID RISCV INSTRUCTION\n");
+	}
 	//EXTRA CREDIT
 	return valid;
 }
@@ -101,11 +100,11 @@ bool interpret(char* instr){
 //Parses an add instruction and stores to register array
 void add_instruct(char* sum, char* op1, char* op2){
 	int32_t address, op1_address, op2_address;
-	//ADDRESSES FOR REGISTERS as integers 
+	//ADDRESSES FOR REGISTERS as integers
 	address = (int32_t) parse_register(sum);
 	op1_address =(int32_t)  parse_register(op1);
 	op2_address = (int32_t) parse_register(op2);
-	//NOW TO USE REG ARRAY 
+	//NOW TO USE REG ARRAY
 	int32_t data_to_write = reg[op1_address] + reg[op2_address];
 	//UPDATE CONTETNS OF ADDRESS
 	reg[address] = data_to_write;
@@ -181,10 +180,8 @@ void xor(char* rd, char* rs1, char* rs2){
 int parse_register(char* p){
 	char* copy_number = p;
 	//START AT NUMBER IF USING REGISTER
-	printf("\ncopy_number=%s\n",p);
 	if(*p == 'X')
 		p = p + 1;
-	printf("\np=%s\n",p);
 	//SAVE WHERE YOU STARTED
 	char* s = copy_number;
 	while((*copy_number = *p) != '\0'){
@@ -193,7 +190,6 @@ int parse_register(char* p){
 	}
 	//GO PACK TO THE START OF YOUR NEW STRING
 	copy_number = s;
-	printf("\ncopy_number=%s\n",copy_number);
 	//have to atoi function get you the integer
 	int reg = atoi(copy_number);
 	return reg;
@@ -254,7 +250,7 @@ void print_regs(){
  * Your code goes in the main
  *
  */
-/*
+
 int main(){
 	// Do not write any code between init_regs
 	init_regs(); // DO NOT REMOVE THIS LINE
@@ -262,7 +258,7 @@ int main(){
 	print_regs();
 
 	// Below is a sample program to a write-read. Overwrite this with your own code.
-	write_read_demo();
+	//write_read_demo();
 
 	printf(" RV32 Interpreter.\nType RV32 instructions. Use upper-case letters and space as a delimiter.\nEnter 'EOF' character to end program\n");
 
@@ -284,8 +280,8 @@ int main(){
 
 	return 0;
 }
-*/
 
+/*
 int main(){
 	// Do not write any code between init_regs
 	init_regs(); // DO NOT REMOVE THIS LINE
@@ -304,4 +300,4 @@ int main(){
    	}
 	return 0;
 }
-
+*/
