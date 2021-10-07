@@ -19,7 +19,8 @@ char *end_word(char* str);
 int count_token(char*str);
 char *copy_str(char *intStr, short len);
 void print_all_tokens(char** tokens,int length);
-
+bool delim_character(char c);
+bool non_delim_character(char c);
 /*
 int main(){
     char ** start;
@@ -35,12 +36,14 @@ int main(){
     return 0;
 }
 */
+
 /* Return true (non-zero) if c is a whitespace characer
    ('\t' or ' ').
    Zero terminators are not printable (therefore false) */
+
 bool delim_character(char c){
     
-    return c == ' ' || c == '\t';
+    return c == ' ' || c == '\0';
 }
 
 /* Return true (non-zero) if c is a non-whitespace
@@ -50,29 +53,48 @@ bool non_delim_character(char c){
     return c != ' ' || c != '\t' || c != '\0';
 }
 
-
-
 /* Returns a pointer to the first character of the next
    space-separated word*/
+/*
 char *word_start(char* str){
     char* s = str;
     while(non_delim_character(*s)){
 	if(delim_character(*s))
-	    break;
+	   break;
         ++s;
     }
     return s + 1;
 }
+*/
+char* word_start(char* str){
+	char* p = str;
+	while(delim_character(*p)){
+		p++;
+	}
+	return p;
+}
+
 /* Returns a pointer to the first space character of the zero
 terminated string*/
+/*
 char *end_word(char* str){
     char* s = str;
     while(non_delim_character(*s)){
 	if(delim_character(*s))
-	    break;
+	   break;
         ++s;
     }
     return s;
+}
+*/
+
+char* end_word(char* str){
+	char* p;
+	p = str;
+	while(!delim_character(*p)){
+		p++;
+	}
+	return p;
 }
 
 /* Returns the count of the number of words or tokens*/
@@ -97,6 +119,7 @@ int count_tokens(char* str){
      tokens[3] = 0
 inStr is start i believe
 */
+/*
 char *copy_str(char *inStr, short len){
     char* new_string = (char*) malloc((len)*sizeof(char));
     char* s = new_string;
@@ -111,9 +134,21 @@ char *copy_str(char *inStr, short len){
     new_string = s;
     return new_string;
 }
+*/
+char *copy_str(char *inStr, short len){
+	char* temp =  malloc((len+1)*sizeof(char));
+	int i;
+	i=0;
+	while((temp[i] = inStr[i]) != '\0'){
+		i++;
+	}
+	temp[len] = '\0';
+	return temp;
+}
 
 /*Returns a double pointer that references the base of a pointer array
 where every pointer points to the base of character arrays*/
+/*
 char** tokenize(char* str){
     char* start;
     char* end;
@@ -121,7 +156,7 @@ char** tokenize(char* str){
     int t_count,sub_length, i;
     t_count = count_tokens(str);
     //Initialize token array
-    char **ptr = malloc(t_count*sizeof(char*));
+    char **ptr = malloc((t_count+1)*sizeof(char*));
     //Have a double pointer poiting to the base of pointer array
     char **initial = ptr;
     start = str;
@@ -151,16 +186,41 @@ char** tokenize(char* str){
 	current_string = copy_str(start,sub_length);
         ptr[i] = current_string;
     }
+    ptr[t_count] = NULL;
     print_all_tokens(initial,t_count);
     return initial;
 }
+*/
+char** tokenize(char* str){
+	char* start;
+	char* end;
+	int t_count,i,j;
+	t_count = count_tokens(str);
+	start =  word_start(str);
+	char ** tok = malloc((t_count+1)*sizeof(char*));
+	i=0;
+	j = 0;
+	while(j < t_count){
+		if(delim_character(*str)){
+			end = end_word(start);
+			tok[i] = copy_str(start,end-start);
+			start = word_start(end);
+			++i;
+			++j;
+		}
+		++str;
+	}
 
+	print_all_tokens(tok,t_count);
+	tok[t_count] = '\0';
+	return tok;
+}
 /*Prints all tokenized tokens given the pointer array and the number of tokens
 representing the length of the pointer array*/
 void print_all_tokens(char** tokens,int length){
     int i;
     i = 0;
-    
+
     for(i = 0; i< length; ++i){
     	printf("Tokens[%d]: %s\n",i,tokens[i]);
     }
