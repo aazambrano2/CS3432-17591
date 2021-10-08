@@ -122,7 +122,7 @@ void load_instruct(char* reg1, char* offset, char* reg2){
 	load_reg = (int32_t) parse_register(reg1);
         offset_int = (int32_t) parse_register(offset);
         base_reg = (int32_t) parse_register(reg2);
-	//LOAD WORD TO REG ARRAY FROM MEM.TXT
+	//LOAD WORD TO REG ARRAY FROM MEMORY
 	int32_t address = reg[base_reg] + offset_int;
         reg[load_reg] = read_address(address,"mem.txt");
 }
@@ -133,8 +133,9 @@ void store_instruct(char* reg1, char* offset, char* reg2){
         load_reg = (int32_t) parse_register(reg1);
         offset_int = (int32_t) parse_register(offset);
         base_reg = (int32_t) parse_register(reg2);
-        int32_t address = reg[load_reg] + offset_int;
+        int32_t address = reg[base_reg] + offset_int;
 	int32_t data = reg[load_reg];
+	//STORE WORD FROM REG ARRAY TO MEMORY
         write_address(data , address,"mem.txt");
 }
 
